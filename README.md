@@ -16,7 +16,7 @@ Unofficial implementation of [YOLO-World + EfficientSAM](https://huggingface.co/
 
 - 利用全新的 [YOLO-World](https://github.com/AILab-CVC/YOLO-World) 与 [EfficientSAM](https://github.com/yformer/EfficientSAM) 实现高效的对象检测 + 分割
   
-- 版本：V1.0 同时支持图像与视频，还支持输出 mask 蒙版
+- 版本：V1.5 同时支持图像与视频，还支持输出 mask 蒙版，增加了 [ltdrdata](https://github.com/ltdrdata) 提供的 YOLO_WORLD_SEGS 新节点
 
 
 # 视频演示
@@ -50,7 +50,16 @@ https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM/assets/140084057/e
 
 ![Dingtalk_20240220175722](https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM/assets/140084057/17b106a2-9b7f-4534-ae3d-b1e97501bc2e)
 
- 
+- 🆕检测 + 分割 | 🔎Yoloworld ESAM Detector Provider （由 [ltdrdata](https://github.com/ltdrdata) 提供，感谢！）
+    - 可配合 Impact-Pack 一起使用
+    - yolo_world_model：接入 YOLO-World 模型
+    - esam_model：接入 EfficientSAM 模型
+    - categories：检测 + 分割内容
+    - iou_threshold：IoU 阈值
+    - with_class_agnostic_nms：是否抑制类别之间的重叠边界框
+
+ ![306523112-ea37dfd0-7019-4207-af2a-aa3c9355b63e](https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM/assets/140084057/b3124f33-2e6c-475d-8603-644d8e54a8c7)
+
 ## 安装 | Install
 
 - 推荐使用管理器 ComfyUI Manager 安装（On the Way）
@@ -75,6 +84,10 @@ https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM/assets/140084057/e
 
 ## 更新日志
 
+- 20240221
+
+  合并了由 [ltdrdata](https://github.com/ltdrdata) 提供的 🔎Yoloworld ESAM Detector Provider 节点
+
 - 20240220
 
   创建项目
@@ -96,3 +109,5 @@ https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM/assets/140084057/e
 [EfficientSAM](https://github.com/yformer/EfficientSAM)
 
 代码还参考了 [@camenduru](https://twitter.com/camenduru) 感谢！
+
+[ltdrdata](https://github.com/ltdrdata) 提供了 🔎Yoloworld ESAM Detector Provider 节点，感谢！
