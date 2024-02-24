@@ -116,17 +116,20 @@ class Yoloworld_ESAM_Zho:
                 "box_thickness": ("INT", {"default": 2, "min": 1, "max": 5}),
                 "text_thickness": ("INT", {"default": 2, "min": 1, "max": 5}),
                 "text_scale": ("FLOAT", {"default": 1.0, "min": 0, "max": 1, "step":0.01}),
-                "with_segmentation": ("BOOLEAN", {"default": True}),
                 "with_confidence": ("BOOLEAN", {"default": True}),
                 "with_class_agnostic_nms": ("BOOLEAN", {"default": False}),
+                "with_segmentation": ("BOOLEAN", {"default": True}),
+                "mask_combined": ("BOOLEAN", {"default": True}),
+                "mask_extracted": ("BOOLEAN", {"default": True}),
+                "mask_extracted_index": ("INT", {"default": 0, "min": 0, "max": 1000}),
             }
         }
 
     RETURN_TYPES = ("IMAGE", "MASK", )
     FUNCTION = "yoloworld_esam_image"
-    CATEGORY = "🔎YOLOWORLD_ESAM"
+    CATEGORY = "YOLOWORLD_ESAM"
                        
-    def yoloworld_esam_image(self, image, yolo_world_model, esam_model, categories, confidence_threshold, iou_threshold, box_thickness, text_thickness, text_scale, with_segmentation, with_confidence, with_class_agnostic_nms):
+    def yoloworld_esam_image(self, image, yolo_world_model, esam_model, categories, confidence_threshold, iou_threshold, box_thickness, text_thickness, text_scale, with_segmentation, mask_combined, with_confidence, with_class_agnostic_nms, mask_extracted, mask_extracted_index):
         categories = process_categories(categories)
         processed_images = []
         processed_masks = []
@@ -149,12 +152,24 @@ class Yoloworld_ESAM_Zho:
                     model=esam_model,
                     device=DEVICE
                 )
-                combined_mask = np.zeros(img.shape[:2], dtype=np.uint8)
-                det_mask = detections.mask
-                for mask in det_mask:
-                    combined_mask = np.logical_or(combined_mask, mask).astype(np.uint8)
-                masks_tensor = torch.tensor(combined_mask, dtype=torch.float32)
-                processed_masks.append(masks_tensor) 
+                if mask_combined:
+                    combined_mask = np.zeros(img.shape[:2], dtype=np.uint8)
+                    det_mask = detections.mask
+                    for mask in det_mask:
+                        combined_mask = np.logical_or(combined_mask, mask).astype(np.uint8)
+                    masks_tensor = torch.tensor(combined_mask, dtype=torch.float32)
+                    processed_masks.append(masks_tensor) 
+                else:
+                    det_mask = detections.mask
+                    
+                    if mask_extracted:
+                        mask_index = mask_extracted_index
+                        selected_mask = det_mask[mask_index]
+                        masks_tensor = torch.tensor(selected_mask, dtype=torch.float32)
+                    else:
+                        masks_tensor = torch.tensor(det_mask, dtype=torch.float32)
+                        
+                    processed_masks.append(masks_tensor)  
                 
             output_image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
             
@@ -174,7 +189,7 @@ class Yoloworld_ESAM_Zho:
             processed_images.append(output_image)
 
         new_ims = torch.cat(processed_images, dim=0)
-        #new_mask = torch.cat(processed_masks, dim=0) if processed_masks else torch.empty(0)
+        
         if processed_masks:
             new_masks = torch.stack(processed_masks, dim=0)
         else:
