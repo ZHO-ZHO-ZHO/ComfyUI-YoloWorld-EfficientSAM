@@ -9,8 +9,11 @@ CPU_EFFICIENT_SAM_CHECKPOINT = "efficient_sam_s_cpu.jit"
 def load(device: torch.device) -> torch.jit.ScriptModule:
     if device.type == "cuda":
         model = torch.jit.load(GPU_EFFICIENT_SAM_CHECKPOINT)
+        model.model_device = 'cuda'
     else:
         model = torch.jit.load(CPU_EFFICIENT_SAM_CHECKPOINT)
+        model.model_device = 'cpu'
+
     model.eval()
     return model
 
@@ -26,10 +29,11 @@ def inference_with_box(
     img_tensor = ToTensor()(image)
 
     predicted_logits, predicted_iou = model(
-        img_tensor[None, ...].to(device),
-        bbox.to(device),
-        bbox_labels.to(device),
+        img_tensor[None, ...].to(model.model_device),
+        bbox.to(model.model_device),
+        bbox_labels.to(model.model_device),
     )
+
     predicted_logits = predicted_logits.cpu()
     all_masks = torch.ge(torch.sigmoid(predicted_logits[0, 0, :, :, :]), 0.5).numpy()
     predicted_iou = predicted_iou[0, 0, ...].cpu().detach().numpy()
