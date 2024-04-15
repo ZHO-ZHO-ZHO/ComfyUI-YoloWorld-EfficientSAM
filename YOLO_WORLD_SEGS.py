@@ -301,7 +301,7 @@ class Yoloworld_ESAM_DetectorProvider_Zho:
     RETURN_TYPES = ("BBOX_DETECTOR", "SEGM_DETECTOR")
     FUNCTION = "doit"
 
-    CATEGORY = "ImpactPack"
+    CATEGORY = "🔎YOLOWORLD_ESAM"
 
     def doit(self, yolo_world_model, categories, iou_threshold, with_class_agnostic_nms, esam_model_opt=None):
         bbox_detector = YoloworldBboxDetector(yolo_world_model, categories, iou_threshold, with_class_agnostic_nms)
