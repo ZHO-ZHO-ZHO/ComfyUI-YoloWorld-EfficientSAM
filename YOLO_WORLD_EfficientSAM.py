@@ -96,6 +96,10 @@ class ESAM_ModelLoader_Zho:
             model_path = os.path.join(current_directory, "efficient_sam_s_cpu.jit")
             
         EFFICIENT_SAM_MODEL = torch.jit.load(model_path)
+        if 'gpu' in model_path:
+            EFFICIENT_SAM_MODEL.model_device = 'cuda'
+        else:
+            EFFICIENT_SAM_MODEL.model_device = 'cpu'
 
         return [EFFICIENT_SAM_MODEL]
 
@@ -128,7 +132,11 @@ class Yoloworld_ESAM_Zho:
     RETURN_TYPES = ("IMAGE", "MASK", )
     FUNCTION = "yoloworld_esam_image"
     CATEGORY = "🔎YOLOWORLD_ESAM"
-                       
+
+    @staticmethod
+    def inference_sam_with_boxes(**kwargs):
+        return inference_with_boxes(**kwargs)
+
     def yoloworld_esam_image(self, image, yolo_world_model, esam_model, categories, confidence_threshold, iou_threshold, box_thickness, text_thickness, text_scale, with_segmentation, mask_combined, with_confidence, with_class_agnostic_nms, mask_extracted, mask_extracted_index):
         categories = process_categories(categories)
         processed_images = []
