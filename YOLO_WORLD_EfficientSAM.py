@@ -131,7 +131,7 @@ class Yoloworld_ESAM_Zho:
 
     RETURN_TYPES = ("IMAGE", "MASK", )
     FUNCTION = "yoloworld_esam_image"
-    CATEGORY = "YOLOWORLD_ESAM"
+    CATEGORY = "🔎YOLOWORLD_ESAM"
 
     @staticmethod
     def inference_sam_with_boxes(**kwargs):
