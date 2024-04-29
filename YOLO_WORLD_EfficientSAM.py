@@ -200,7 +200,7 @@ class Yoloworld_ESAM_Zho:
         return new_ims, new_masks
 
 
-class Yoloworld_ESAM_Extractor_Zho:
+class Yoloworld_ESAM_Mask_Extractor_Zho:
     def __init__(self):
         pass
 
@@ -243,12 +243,12 @@ NODE_CLASS_MAPPINGS = {
     "Yoloworld_ModelLoader_Zho": Yoloworld_ModelLoader_Zho,
     "ESAM_ModelLoader_Zho": ESAM_ModelLoader_Zho,
     "Yoloworld_ESAM_Zho": Yoloworld_ESAM_Zho,
-    "Yoloworld_ESAM_Extractor_Zho": Yoloworld_ESAM_Extractor_Zho,
+    "Yoloworld_ESAM_Mask_Extractor_Zho": Yoloworld_ESAM_Mask_Extractor_Zho,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "Yoloworld_ModelLoader_Zho": "🔎Yoloworld Model Loader",
     "ESAM_ModelLoader_Zho": "🔎ESAM Model Loader",
     "Yoloworld_ESAM_Zho": "🔎Yoloworld ESAM",
-    "Yoloworld_ESAM_Extractor_Zho": "🔎Yoloworld ESAM Mask Extractor",
+    "Yoloworld_ESAM_Mask_Extractor_Zho": "🔎Yoloworld ESAM Mask Extractor",
 }
