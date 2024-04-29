@@ -166,10 +166,12 @@ class Yoloworld_ESAM_Zho:
                         mask_index = mask_extracted_index
                         selected_mask = det_mask[mask_index]
                         masks_tensor = torch.tensor(selected_mask, dtype=torch.float32)
+                        processed_masks.append(masks_tensor) 
                     else:
-                        masks_tensor = torch.tensor(det_mask, dtype=torch.float32)
-                        
-                    processed_masks.append(masks_tensor)  
+                        for _mask in det_mask:
+                            masks_tensor = torch.tensor(_mask, dtype=torch.float32)
+                            processed_masks.append(masks_tensor)                       
+                    
                 
             output_image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
             
@@ -198,14 +200,55 @@ class Yoloworld_ESAM_Zho:
         return new_ims, new_masks
 
 
+class Yoloworld_ESAM_Extractor_Zho:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+                    "mask": ("MASK", ),
+                    "mask_extracted_index": ("INT", {"default": 0, "min": 0, "max": 1000}),
+                      }
+                }
+
+    RETURN_TYPES = ("MASK", )
+    FUNCTION = "yoloworld_esam_extract"
+    CATEGORY = "🔎YOLOWORLD_ESAM"
+
+    def yoloworld_esam_extract(self, mask, mask_extracted_index):
+        
+        processed_masks=[]
+        mask_index = mask_extracted_index
+
+        try:
+            _ = mask[mask_index]  # validate index
+        except IndexError:
+            return torch.empty(0)
+        
+        selected_mask = mask[mask_index]
+        masks_tensor = torch.tensor(selected_mask, dtype=torch.float32)
+        processed_masks.append(masks_tensor)
+
+        if processed_masks:
+            new_masks = torch.stack(processed_masks, dim=0)
+        else:
+            new_masks = torch.empty(0)
+
+        return new_masks
+
+
+
 NODE_CLASS_MAPPINGS = {
     "Yoloworld_ModelLoader_Zho": Yoloworld_ModelLoader_Zho,
     "ESAM_ModelLoader_Zho": ESAM_ModelLoader_Zho,
     "Yoloworld_ESAM_Zho": Yoloworld_ESAM_Zho,
+    "Yoloworld_ESAM_Extractor_Zho": Yoloworld_ESAM_Extractor_Zho,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "Yoloworld_ModelLoader_Zho": "🔎Yoloworld Model Loader",
     "ESAM_ModelLoader_Zho": "🔎ESAM Model Loader",
     "Yoloworld_ESAM_Zho": "🔎Yoloworld ESAM",
+    "Yoloworld_ESAM_Extractor_Zho": "🔎Yoloworld ESAM Mask Extractor",
 }
