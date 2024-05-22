@@ -1,0 +1,15 @@
+[project]
+name = "comfyui-yoloworld-efficientsam"
+description = "Unofficial implementation of [a/YOLO-World + EfficientSAM](https://huggingface.co/spaces/SkalskiP/YOLO-World) & [a/YOLO-World](https://github.com/AILab-CVC/YOLO-World) for ComfyUI\nNOTE: Install the efficient_sam model from the Install models menu.\n[w/When installing or updating this custom node, many installation packages may be downgraded due to the installation of requirements.\n!! python3.12 is incompatible.]"
+version = "1.0.0"
+license = "LICENSE"
+dependencies = ["inference-gpu[yolo-world]==0.9.13"]
+
+[project.urls]
+Repository = "https://github.com/ZHO-ZHO-ZHO/ComfyUI-YoloWorld-EfficientSAM"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-YoloWorld-EfficientSAM"
+Icon = ""
